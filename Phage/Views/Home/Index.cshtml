@@ -1,0 +1,79 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Phage</title>
+    @Styles.Render("~/Content/css")
+</head>
+<body>
+    <div id="popup">
+        <form onsubmit="return false;">
+            <div class="form-group">
+                <h4>Phage</h4>
+            </div>
+            <div class="form-group">
+                <input class="form-control" id="name" type="text" placeholder="Name" />
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-default" onclick="start()">Start!</button>
+            </div>
+        </form>
+    </div>
+    <canvas id="canvas"></canvas>
+    @Scripts.Render("~/bundles/scripts")
+
+    <script>
+        var app = { alive: false, name: "" };
+
+        var start = function () {
+            app.name = document.getElementById("name").value;
+            if (app.name) {
+                app.alive = true;
+                document.getElementById("popup").style.display = 'none';
+                app.draw();
+            }
+        };
+
+        app.draw = function () {
+            var c = document.getElementById("canvas");
+            var ctx = c.getContext("2d");
+
+            ctx.beginPath();
+            ctx.rect(0, 0, app.w, app.h);
+            ctx.fillStyle = "lightgray";
+            ctx.fill();
+
+            if (app.alive) {
+                ctx.font = "15px Arial";
+                ctx.fillStyle = "#000";
+                ctx.fillText("Hello " + app.name, 10, 20);
+            }
+        };
+
+        app.resizeIt = function () {
+            app.w = document.documentElement.clientWidth || window.innerWidth || 0;
+            app.h = document.documentElement.clientHeight || window.innerHeight || 0;
+
+            var c = document.getElementById("canvas");
+
+            c.width = app.w;
+            c.height = app.h;
+
+            var ctx = c.getContext("2d");
+
+            ctx.beginPath();
+            ctx.rect(0, 0, app.w, app.h);
+            ctx.fillStyle = "lightgray";
+            ctx.fill();
+        };
+
+        app.resizeIt();
+        window.addEventListener('resize', app.resizeIt, true);
+    </script>
+</body>
+</html>
